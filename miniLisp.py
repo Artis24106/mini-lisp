@@ -3,6 +3,7 @@ from lark import *
 import copy
 import enum
 
+'''All tree type from AST tree'''
 class Tree_type(enum.Enum):
     program = "program"
     plus = "plus"
@@ -27,12 +28,14 @@ class Tree_type(enum.Enum):
     print_num = "print_num"
     print_bool = "print_bool"
 
+'''All token type from AST tree'''
 class Token_type(enum.Enum):
     NOT_TOKEN = "NOT_TOKEN"
     NUMBER = "NUMBER"
     BOOL_VAL = "BOOL_VAL"
     ID = "ID"
 
+'''Error type for error handling'''
 class Error_type(enum.Enum):
     NOT_NUMBER = 0
     NOT_BOOL = 1
@@ -41,18 +44,24 @@ class Error_type(enum.Enum):
     ARGS_LEN_NOT_MATCH = 4
     SYNTAX_ERROR = 5
 
+'''Class type for function define'''
 class Def_function(object):
     def __init__(self, args, body, def_var, def_func):
         self.args, self.body, self.def_var, self.def_func = args, body, def_var, def_func
     def __call__(self, *params):
+        '''argument length check'''
         if len(params) != len(self.args):
             error_handle(Error_type.ARGS_LEN_NOT_MATCH)
+
+        '''new var, func map to this function'''
         new_def_var, new_def_func = copy.deepcopy(self.def_var), copy.deepcopy(self.def_func)
         for (arg, param) in zip(self.args, params):
             if isinstance(param, Def_function):
                 new_def_func[arg] = param
             else:
                 new_def_var[arg] = param
+
+        '''execute all function code'''
         for def_stmt in self.body[:-1]:
             traverse(def_stmt, new_def_var, new_def_func)
         return traverse(self.body[-1], new_def_var, new_def_func)
@@ -76,9 +85,7 @@ def visit_all_child(tree, def_var, def_func, type_check=Token_type.NOT_TOKEN):
     # print("VISIT_ALL_CHILD", tree)
     childs = []
     for el in tree.children:
-        if isinstance(tree, Token):
-            el.value
-        else:
+        if not isinstance(tree, Token):
             el = traverse(el, def_var, def_func)
         childs.append(el)
     
@@ -137,7 +144,6 @@ def traverse(tree, def_var={}, def_func={}):
     # def_stmt
     elif Tree_type(tree.data) == Tree_type.def_stmt:
         [var, exp] = tree.children
-        # print("\nDEF_STMT", var, exp)
         if isinstance(exp, Tree) and (Tree_type(exp.data) == Tree_type.fun_exp or Tree_type(exp.data) == Tree_type.fun_call):
             def_func[var] = traverse(exp, def_var, def_func)
         else:
@@ -155,10 +161,8 @@ def traverse(tree, def_var={}, def_func={}):
         return tree.children
     # fun_call
     elif Tree_type(tree.data) == Tree_type.fun_call:
-        # print(def_var, def_func)
         func = traverse(tree.children[0], def_var, def_func)
         params = [traverse(el, def_var, def_func) for el in tree.children[1:]]
-        # print("PARAM*", *params)
         return func(*params)
 
     # fun_name
@@ -187,27 +191,27 @@ def traverse(tree, def_var={}, def_func={}):
         if Token_type(test_exp.type) != Token_type.BOOL_VAL:
             error_handle(Error_type.NOT_BOOL)
 
-        # :
         return traverse(tree.children[1 if test_exp == "#t" else 2], def_var, def_func)
-        # else:
-        #     return traverse(tree.children[2], def_var, def_func)
             
-    # print
+    # print_num
     elif Tree_type(tree.data) == Tree_type.print_num:
         print_data = visit_all_child(tree, def_var, def_func, Token_type.NUMBER)[0]
         print(print_data)
         return print_data
         
+    # print_bool
     elif Tree_type(tree.data) == Tree_type.print_bool:
         print_data = visit_all_child(tree, def_var, def_func, Token_type.BOOL_VAL)[0]
         print(print_data)
         return print_data
 
 def main():
+    '''grammer'''
     with open("./grammer/grammer.lark") as f:
         gram = f.read()
     lark = Lark(gram, start='program', parser='lalr')
 
+    '''input lisp code'''
     lines = []
     while True:
         try:
@@ -217,12 +221,14 @@ def main():
             break
     lisp_text = '\n'.join(lines)
 
+    '''parse'''
     try:
         tree = lark.parse(lisp_text)
     except(UnexpectedInput, UnexpectedToken, UnexpectedCharacters) as e:
         error_handle(Error_type.SYNTAX_ERROR)
+
+    '''traversal'''
     # print(tree)
-    # print("RESULT", traverse(tree))
     traverse(tree)
 
 if __name__ == "__main__":
