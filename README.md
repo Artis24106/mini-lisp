@@ -26,3 +26,25 @@
 - [ark-parser/lark](https://github.com/lark-parser/lark)
 
 ## Usage
+### set up
+```bash=1
+git clone https://github.com/Artis24106/mini-lisp.git
+cd mini-lisp
+```
+### run it!
+```bash=1
+python3 miniLisp.py
+# and input lisp code
+```
+### or you can just redirect .lsp file as input
+```bash=1
+python3 miniLisp.py < myLisp.lsp
+```
+
+## Operations
+| Feature              | Description                             | Points |
+| -------------------- | --------------------------------------- | ------ |
+| Recursion            | Support recursive function call         | 5      |
+| Type Checking        | Print error messages for type errors    | 5      |
+| Nested Function      | Nested function (static scope)          | 5      |
+| First-class Function | Able to pass functions, support closure | 5      |
