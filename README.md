@@ -42,9 +42,30 @@ python3 miniLisp.py < myLisp.lsp
 ```
 
 ## Operations
-| Feature              | Description                             | Points |
-| -------------------- | --------------------------------------- | ------ |
-| Recursion            | Support recursive function call         | 5      |
-| Type Checking        | Print error messages for type errors    | 5      |
-| Nested Function      | Nested function (static scope)          | 5      |
-| First-class Function | Able to pass functions, support closure | 5      |
+### Numerical Operators
+
+| Name     | Symbol | Example     | Example Output | Parameter Type | Output Type |
+| -------- | ------ | ----------- | -------------- | -------------- | ----------- |
+| Plus     | `+`    | `(+ 1 2)`   | `3`            | Number(s)      | Number      |
+| Minus    | `-`    | `(- 1 2)`   | `-1`           | Number(s)      | Number      |
+| Multiply | `*`    | `(* 1 2)`   | `2`            | Number(s)      | Number      |
+| Divide   | `/`    | `(/ 8 4)`   | `2`            | Number(s)      | Number      |
+| Modulus  | `mod`  | `(mod 8 4)` | `0`            | Number(s)      | Number      |
+| Greater  | `>`    | `(> 1 2)`   | `#f`           | Number(s)      | Boolean     |
+| Smaller  | `<`    | `(< 1 2)`   | `#t`           | Number(s)      | Boolean     |
+| Equal    | `=`    | `(= 1 2)`   | `#f`           | Number(s)      | Boolean     |
+
+### Logical Operators
+
+| Name | Symbol | Example       | Example Output | Parameter Type | Output Type |
+| ---- | ------ | ------------- | -------------- | -------------- | ----------- |
+| And  | `and`  | `(and #t #f)` | `#f`           | Boolean(s)     | Boolean     |
+| Or   | `or`   | `(or #t #f)`  | `#t`           | Boolean(s)     | Boolean     |
+| Not  | `not`  | `(not #t)`    | `#f`           | Boolean        | Boolean     |
+
+### Other Operators
+| Symbol   | Parameter Type | Output Type                         |
+| -------- | -------------- | ----------------------------------- |
+| `define` | Boolean(s)     | no output                           |
+| `fun`    | Any            | Depend on function                  |
+| `if`     | Any            | Depend on `then-exp` and `else-exp` |
