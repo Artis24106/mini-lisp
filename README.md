@@ -2,11 +2,10 @@
 
 ## Feature
 ### Basic Feature
-- [x] haha is me
 
 |                       | Feature              | Description                                      | Points |
 | --------------------- | -------------------- | ------------------------------------------------ | ------ |
-|<ul><li>[x] </li></ul> | Syntax Validation    | Print "syntax error" when parsing invalid syntax | 10     |
+|<ul style="margin-bottom: 0px"><li>[x] </li></ul> | Syntax Validation    | Print "syntax error" when parsing invalid syntax | 10     |
 | <ul><li>[x] </li></ul> | Print                | Implement `print-num` statement                  | 10     |
 | <ul><li>[x] </li></ul> | Numerical Operations | Implement all numerical operations               | 25     |
 | <ul><li>[x] </li></ul> | Logical Operations   | Implement all logical operations                 | 25     |
